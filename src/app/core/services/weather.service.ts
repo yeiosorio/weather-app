@@ -9,14 +9,20 @@ import { WeatherResponse, LocationSuggestion } from '../../shared/interfaces/wea
 })
 export class WeatherService {
   private readonly API_URL = 'http://api.weatherapi.com/v1';
-  private readonly CACHE_SIZE = 1;
+  private readonly CACHE_SIZE = 1; // Se establece la constante de CACHE solo a un buffer size
   private cache = new Map<string, Observable<WeatherResponse>>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
+  /* 
+    @arg city
+    @desc Recupera datos del clima por nombre de ciudad en el endpoint current.json
+    @return retorna un observable con el response de tipo WeatherResponse
+  */
   getCurrentWeather(city: string): Observable<WeatherResponse> {
     const cacheKey = `weather_${city}`;
-    
+
+    // Se verifica si no ha sido buscada la ciudad
     if (!this.cache.has(cacheKey)) {
       const params = new HttpParams()
         .set('key', environment.weatherApiKey)
@@ -28,6 +34,8 @@ export class WeatherService {
           shareReplay(this.CACHE_SIZE)
         );
 
+      // Se establece una key y la respuesta en el objeto Map de chache para
+      // que no vuelva a ser llamado si ya existe
       this.cache.set(cacheKey, request);
     }
 
