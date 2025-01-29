@@ -6,6 +6,7 @@
       placeholder="Buscar ciudad..."
       class="search-input"
       (focus)="showSuggestions = true"
+      (blur)="onBlur()"
     />
     @if (loading) {
       <div class="loading-indicator"></div>
@@ -17,7 +18,7 @@
       @for (suggestion of suggestions; track suggestion.id) {
         <li
           class="suggestion-item"
-          (click)="selectLocation(suggestion)"
+          (mousedown)="selectLocation(suggestion)"
         >
           {{ suggestion.name }}, {{ suggestion.region }}, {{ suggestion.country }}
         </li>

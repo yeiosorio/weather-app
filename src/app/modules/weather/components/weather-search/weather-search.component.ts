@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
@@ -15,7 +15,7 @@ import { LocationSuggestion } from '../../../../shared/interfaces/weather.interf
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WeatherSearchComponent implements OnInit, OnDestroy {
-  @Output() locationSelected = new EventEmitter<string>();
+  @Output() locationSelected = new EventEmitter<LocationSuggestion>();
   searchControl = new FormControl('');
   suggestions: LocationSuggestion[] = [];
   showSuggestions = false;
@@ -25,7 +25,8 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private weatherService: WeatherService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +37,9 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(query => {
       this.loading = true;
+      this.showSuggestions = true;
       this.error = null;
+      this.cdr.markForCheck();
       
       this.weatherService.searchLocations(query!).pipe(
         takeUntil(this.destroy$)
@@ -44,11 +47,13 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
         next: (results) => {
           this.suggestions = results;
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: (error) => {
           this.error = 'Error al buscar ubicaciones. Por favor, intente nuevamente.';
           this.loading = false;
           console.error('Error searching locations:', error);
+          this.cdr.markForCheck();
         }
       });
     });
@@ -56,10 +61,19 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
 
   selectLocation(location: LocationSuggestion): void {
     this.storageService.addToHistory(location);
-    this.searchControl.setValue('');
+    this.searchControl.setValue('', { emitEvent: false });
     this.suggestions = [];
     this.showSuggestions = false;
-    this.locationSelected.emit(location.name);
+    this.locationSelected.emit(location);
+    this.cdr.markForCheck();
+  }
+
+  onBlur(): void {
+    // Retrasamos el ocultamiento de las sugerencias para permitir el clic
+    setTimeout(() => {
+      this.showSuggestions = false;
+      this.cdr.markForCheck();
+    }, 200);
   }
 
   ngOnDestroy(): void {
