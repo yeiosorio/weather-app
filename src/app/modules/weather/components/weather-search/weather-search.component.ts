@@ -1,10 +1,16 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, takeUntil, switchMap } from 'rxjs/operators';
 import { WeatherService } from '../../../../core/services/weather.service';
 import { StorageService } from '../../../../core/services/storage.service';
-import { LocationSuggestion } from '../../../../shared/interfaces/weather.interface';
+import { LocationSuggestion, WeatherResponse } from '../../../../shared/interfaces/weather.interface';
+
+interface SuggestionItem {
+  id: string;
+  text: string;
+}
 
 @Component({
   selector: 'app-weather-search',
@@ -17,10 +23,10 @@ import { LocationSuggestion } from '../../../../shared/interfaces/weather.interf
 export class WeatherSearchComponent implements OnInit, OnDestroy {
   @Output() locationSelected = new EventEmitter<LocationSuggestion>();
   searchControl = new FormControl('');
-  suggestions: LocationSuggestion[] = [];
+  suggestions: SuggestionItem[] = [];
   showSuggestions = false;
   loading = false;
-  error: string | null = null;
+  hasError = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -33,29 +39,26 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      filter(query => !!query && query.length >= 2),
-      takeUntil(this.destroy$)
-    ).subscribe(query => {
-      this.loading = true;
-      this.showSuggestions = true;
-      this.error = null;
-      this.cdr.markForCheck();
-      
-      this.weatherService.searchLocations(query!).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe({
-        next: (results) => {
-          this.suggestions = results;
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          this.error = 'Error al buscar ubicaciones. Por favor, intente nuevamente.';
-          this.loading = false;
-          console.error('Error searching locations:', error);
-          this.cdr.markForCheck();
-        }
-      });
+      filter((value): value is string => !!value && value.length >= 2),
+      switchMap(value => this.weatherService.searchLocations(value))
+    ).subscribe({
+      next: (locations) => {
+        this.suggestions = locations.map(loc => ({
+          id: `${loc.name}-${loc.region}-${loc.country}`,
+          text: `${loc.name}, ${loc.region}, ${loc.country}`
+        }));
+        this.loading = false;
+        this.showSuggestions = true;
+        this.hasError = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.hasError = true;
+        setTimeout(() => this.hasError = false, 1000);
+        this.loading = false;
+        this.showSuggestions = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -69,7 +72,6 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
   }
 
   onBlur(): void {
-    // Retrasamos el ocultamiento de las sugerencias para permitir el clic
     setTimeout(() => {
       this.showSuggestions = false;
       this.cdr.markForCheck();
@@ -79,5 +81,36 @@ export class WeatherSearchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  searchCity(): void {
+    const city = this.searchControl.value;
+    if (city) {
+      this.weatherService.getCurrentWeather(city).subscribe({
+        next: (data: WeatherResponse) => {
+          const location: LocationSuggestion = {
+            id: `${data.location.name}-${data.location.region}-${data.location.country}`,
+            name: data.location.name,
+            region: data.location.region,
+            country: data.location.country
+          };
+          this.locationSelected.emit(location);
+          this.suggestions = [];
+          this.showSuggestions = false;
+          this.searchControl.setValue('');
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.hasError = true;
+          setTimeout(() => this.hasError = false, 1000);
+        }
+      });
+    }
+  }
+
+  selectCity(suggestion: SuggestionItem): void {
+    const cityName = suggestion.text.split(',')[0];
+    /* this.searchControl.setValue(cityName); */
+    this.searchCity();
   }
 }

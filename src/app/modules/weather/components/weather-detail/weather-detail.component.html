@@ -1,8 +1,8 @@
 @if (weatherData) {
-  <div class="weather-card">
+  <div class="weather-card animate__animated animate__fadeIn">
     <div class="weather-content">
       <div class="main-info">
-        <div class="location-info">
+        <div class="location-info animate__animated animate__fadeInDown">
           <h2>{{ weatherData.location.name }}</h2>
           <p class="location-detail">
             {{ weatherData.location.region }}, {{ weatherData.location.country }}
@@ -13,7 +13,7 @@
         </div>
 
         <div class="temperature-info">
-          <div class="temperature-container">
+          <div class="temperature-container animate__animated animate__fadeInRight">
             <div class="temperature">
               <span class="temp-value">{{ weatherData.current.temp_c }}</span>
               <span class="temp-unit">°C</span>
@@ -28,16 +28,16 @@
             <img
               [src]="weatherData.current.condition.icon"
               [alt]="weatherData.current.condition.text"
-              class="condition-icon"
+              class="condition-icon animate__animated animate__pulse animate__infinite"
             />
-            <p class="condition-text">
+            <p class="condition-text animate__animated animate__fadeIn">
               {{ weatherData.current.condition.text }}
             </p>
           </div>
         </div>
       </div>
 
-      <div class="additional-info">
+      <div class="additional-info animate__animated animate__fadeInUp">
         <div class="info-item">
           <span class="info-label">Viento</span>
           <span class="info-value">{{ weatherData.current.wind_kph }} km/h</span>
@@ -53,7 +53,8 @@
       </div>
 
       <button
-        class="favorite-button"
+        class="favorite-button animate__animated"
+        [class.animate__heartBeat]="isFavorite"
         (click)="toggleFavorite()"
         [class.is-favorite]="isFavorite"
       >
@@ -62,7 +63,7 @@
     </div>
   </div>
 } @else {
-  <div class="no-data">
+  <div class="no-data animate__animated animate__fadeIn">
     <p>Selecciona una ciudad para ver el clima actual</p>
   </div>
 }

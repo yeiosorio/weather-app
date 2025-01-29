@@ -1,13 +1,26 @@
 .weather-container {
   padding: 24px;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+}
+.weather-container .weather-tittle {
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .weather-container {
+    padding: 16px;
+    gap: 20px;
+  }
 }
 
 h1 {
   text-align: center;
   color: #333;
-  margin-bottom: 32px;
 }
 
 .error-message {

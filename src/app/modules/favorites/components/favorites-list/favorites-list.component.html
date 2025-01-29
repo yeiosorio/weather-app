@@ -1,27 +1,67 @@
-<div class="favorites-container">
-  @if (favorites.length > 0) {
-    <div class="favorites-grid">
-      @for (favorite of favorites; track favorite.id) {
-        <div class="favorite-card">
-          <div class="favorite-info">
-            <h3>{{ favorite.name }}</h3>
-            <p>{{ favorite.region }}, {{ favorite.country }}</p>
-          </div>
-          <div class="favorite-actions">
-            <button
-              class="remove-button"
-              (click)="removeFavorite(favorite.id)"
-            >
-              Eliminar
-            </button>
-          </div>
-        </div>
-      }
+@if (favorites.length > 0) {
+  <div class="favorites-container">
+    <h2>Ciudades favoritas</h2>
+
+    <div class="table-container">
+      <table class="favorites-table">
+        <thead>
+          <tr>
+            <th>Ciudad</th>
+            <th>Región</th>
+            <th>País</th>
+            <th>Temperatura</th>
+            <th>Estado</th>
+            <th>Última actualización</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of displayedFavorites; track trackByFn($index, item)) {
+            <tr class="favorite-row">
+              <td class="city-cell">{{ item.name }}</td>
+              <td>{{ item.region }}</td>
+              <td>{{ item.country }}</td>
+              <td class="temp-cell">{{ item.weather?.temp_c ?? '--' }}{{ item.weather?.temp_c ? '°C' : '' }}</td>
+              <td class="condition-cell">
+                @if (item.weather?.condition?.text && item.weather?.condition?.icon) {
+                  <div class="condition-content">
+                    <img 
+                      [src]="item.weather?.condition?.icon" 
+                      [alt]="item.weather?.condition?.text"
+                      class="condition-icon"
+                    />
+                    <span>{{ item.weather?.condition?.text }}</span>
+                  </div>
+                } @else {
+                  --
+                }
+              </td>
+              <td class="time-cell">{{ item.weather?.localtime ?? item.timestamp | date:'medium' }}</td>
+              <td class="actions-cell">
+                <button class="search-button" (click)="searchWeather(item)">
+                  Ver clima
+                </button>
+                <button class="remove-button" (click)="removeFromFavorites(item.id)">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
-  } @else {
-    <div class="no-favorites">
-      <p>No tienes ciudades favoritas guardadas.</p>
-      <p>Agrega ciudades desde la búsqueda del clima.</p>
-    </div>
-  }
-</div>
+
+    @if (hasMoreItems) {
+      <div class="load-more">
+        <button class="load-more-button" (click)="loadMoreItems()">
+          Cargar más
+        </button>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="no-favorites">
+    <p>No tienes ciudades favoritas</p>
+    <p>Agrega ciudades desde la búsqueda del clima</p>
+  </div>
+}

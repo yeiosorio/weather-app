@@ -29,7 +29,7 @@ export class WeatherComponent implements OnInit {
     if (navigation?.extras.state?.['searchLocation']) {
       const location = navigation.extras.state['searchLocation'];
       this.onLocationSelected({
-        id: Date.now(),
+        id: Date.now().toString(),
         name: location,
         region: '',
         country: ''
@@ -53,6 +53,28 @@ export class WeatherComponent implements OnInit {
     this.weatherService.getCurrentWeather(query).subscribe({
       next: (weather) => {
         this.currentWeather = weather;
+        
+        // Guardar en el historial con la información del clima
+        const storedLocation = {
+          id: Date.now(),
+          name: weather.location.name,
+          region: weather.location.region,
+          country: weather.location.country,
+          timestamp: Date.now(),
+          weather: {
+            temp_c: weather.current.temp_c,
+            condition: {
+              text: weather.current.condition.text,
+              icon: weather.current.condition.icon
+            },
+            localtime: weather.location.localtime
+          }
+        };
+        
+        this.storageService.addToHistory({
+          ...storedLocation,
+          id: storedLocation.id.toString()
+        });
         this.cdr.markForCheck();
       },
       error: (error) => {

@@ -41,10 +41,19 @@ export class WeatherDetailComponent {
     if (!this.weatherData) return;
 
     const location = {
-      id: Date.now(),
+      id: Date.now().toString(),
       name: this.weatherData.location.name,
       region: this.weatherData.location.region,
-      country: this.weatherData.location.country
+      country: this.weatherData.location.country,
+      timestamp: Date.now(),
+      weather: {
+        temp_c: this.weatherData.current.temp_c,
+        condition: {
+          text: this.weatherData.current.condition.text,
+          icon: this.weatherData.current.condition.icon
+        },
+        localtime: this.weatherData.location.localtime
+      }
     };
 
     if (this.isFavorite) {

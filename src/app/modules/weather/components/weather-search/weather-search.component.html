@@ -1,34 +1,33 @@
-<div class="search-container">
+<div class="search-container animate__animated animate__fadeIn">
   <div class="search-box">
     <input
       type="text"
       [formControl]="searchControl"
       placeholder="Buscar ciudad..."
-      class="search-input"
+      class="search-input animate__animated"
+      [class.animate__shakeX]="hasError"
       (focus)="showSuggestions = true"
       (blur)="onBlur()"
     />
-    @if (loading) {
-      <div class="loading-indicator"></div>
-    }
+    <button 
+      class="search-button animate__animated animate__fadeIn"
+      (click)="searchCity()"
+      [disabled]="!searchControl.value"
+    >
+      <i class="fas fa-search"></i>
+    </button>
   </div>
-
+  
   @if (showSuggestions && suggestions.length > 0) {
-    <ul class="suggestions-list">
+    <div class="suggestions-container animate__animated animate__fadeInDown">
       @for (suggestion of suggestions; track suggestion.id) {
-        <li
-          class="suggestion-item"
-          (mousedown)="selectLocation(suggestion)"
+        <div 
+          class="suggestion-item animate__animated animate__fadeIn"
+          (mousedown)="selectCity(suggestion)"
         >
-          {{ suggestion.name }}, {{ suggestion.region }}, {{ suggestion.country }}
-        </li>
+          {{ suggestion.text }}
+        </div>
       }
-    </ul>
-  }
-
-  @if (error) {
-    <div class="error-message">
-      {{ error }}
     </div>
   }
 </div>

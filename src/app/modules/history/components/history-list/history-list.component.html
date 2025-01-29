@@ -26,34 +26,22 @@
               <td class="city-cell">{{ item.name }}</td>
               <td>{{ item.region }}</td>
               <td>{{ item.country }}</td>
-              <td class="temp-cell">
-                @if (item.weather?.temp_c !== undefined) {
-                  {{ item.weather.temp_c }}°C
-                } @else {
-                  --
-                }
-              </td>
+              <td class="temp-cell">{{ item.weather?.temp_c ?? '--' }}{{ item.weather?.temp_c ? '°C' : '' }}</td>
               <td class="condition-cell">
-                @if (item.weather?.condition) {
+                @if (item.weather?.condition?.text && item.weather?.condition?.icon) {
                   <div class="condition-content">
                     <img 
-                      [src]="item.weather.condition.icon" 
-                      [alt]="item.weather.condition.text"
+                      [src]="item.weather?.condition?.icon" 
+                      [alt]="item.weather?.condition?.text"
                       class="condition-icon"
                     />
-                    <span>{{ item.weather.condition.text }}</span>
+                    <span>{{ item.weather?.condition?.text }}</span>
                   </div>
                 } @else {
                   --
                 }
               </td>
-              <td class="time-cell">
-                @if (item.weather?.localtime) {
-                  {{ item.weather.localtime | date:'medium' }}
-                } @else {
-                  {{ item.timestamp | date:'medium' }}
-                }
-              </td>
+              <td class="time-cell">{{ item.weather?.localtime ?? item.timestamp | date:'medium' }}</td>
               <td class="actions-cell">
                 <button class="search-again-button" (click)="searchAgain(item)">
                   Buscar de nuevo

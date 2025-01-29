@@ -11,6 +11,7 @@ export interface WeatherResponse {
     condition: {
       text: string;
       icon: string;
+      code: number;
     };
     wind_kph: number;
     humidity: number;
@@ -19,17 +20,13 @@ export interface WeatherResponse {
 }
 
 export interface LocationSuggestion {
-  id: number;
+  id: string;
   name: string;
   region: string;
   country: string;
 }
 
-export interface StoredLocation {
-  id: number;
-  name: string;
-  region: string;
-  country: string;
+export interface StoredLocation extends LocationSuggestion {
   timestamp?: number;
   weather?: {
     temp_c: number;
@@ -39,4 +36,9 @@ export interface StoredLocation {
     };
     localtime: string;
   };
+}
+
+export interface WeatherError {
+  status: number;
+  message: string;
 } 

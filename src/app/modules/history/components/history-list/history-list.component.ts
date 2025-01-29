@@ -15,7 +15,7 @@ import { StoredLocation } from '../../../../shared/interfaces/weather.interface'
 export class HistoryListComponent implements OnInit {
   history: StoredLocation[] = [];
   displayedHistory: StoredLocation[] = [];
-  private pageSize = 6;
+  private pageSize = 5;
   private currentPage = 1;
   hasMoreItems = false;
 
@@ -60,7 +60,7 @@ export class HistoryListComponent implements OnInit {
     });
   }
 
-  trackByFn(index: number, item: StoredLocation): number {
+  trackByFn(index: number, item: StoredLocation): string {
     return item.id;
   }
 }
