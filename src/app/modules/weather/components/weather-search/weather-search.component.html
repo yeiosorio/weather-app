@@ -9,13 +9,6 @@
       (focus)="showSuggestions = true"
       (blur)="onBlur()"
     />
-    <button 
-      class="search-button animate__animated animate__fadeIn"
-      (click)="searchCity()"
-      [disabled]="!searchControl.value"
-    >
-      <i class="fas fa-search"></i>
-    </button>
   </div>
   
   @if (showSuggestions && suggestions.length > 0) {
