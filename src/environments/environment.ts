@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  weatherApiKey: 'TU_API_KEY_AQUI' // Reemplazar con tu API key de WeatherAPI
+  weatherApiKey: '33596ac1debb4c5f83713824252901'
 }; 
