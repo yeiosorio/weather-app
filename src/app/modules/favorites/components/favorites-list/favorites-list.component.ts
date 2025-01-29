@@ -32,6 +32,7 @@ export class FavoritesListComponent implements OnInit {
     this.loadFavorites();
   }
 
+  /* carga inicial favoritos almacenados en localStorage */
   private loadFavorites(): void {
     this.favorites = this.storageService.getFavorites();
     this.updateWeatherInfo();
