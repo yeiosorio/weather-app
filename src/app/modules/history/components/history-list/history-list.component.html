@@ -1,40 +1,80 @@
-<div class="history-container">
-  <div class="history-header">
-    <h2>Historial de Búsquedas</h2>
-    @if (history.length > 0) {
-      <button
-        class="clear-button"
-        (click)="clearHistory()"
-      >
-        Limpiar Historial
+@if (history.length > 0) {
+  <div class="history-container">
+    <div class="history-header">
+      <h2>Historial de búsquedas</h2>
+      <button class="clear-button" (click)="clearHistory()">
+        Limpiar historial
       </button>
+    </div>
+
+    <div class="table-container">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Ciudad</th>
+            <th>Región</th>
+            <th>País</th>
+            <th>Temperatura</th>
+            <th>Estado</th>
+            <th>Hora local</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of displayedHistory; track trackByFn($index, item)) {
+            <tr class="history-row">
+              <td class="city-cell">{{ item.name }}</td>
+              <td>{{ item.region }}</td>
+              <td>{{ item.country }}</td>
+              <td class="temp-cell">
+                @if (item.weather?.temp_c !== undefined) {
+                  {{ item.weather.temp_c }}°C
+                } @else {
+                  --
+                }
+              </td>
+              <td class="condition-cell">
+                @if (item.weather?.condition) {
+                  <div class="condition-content">
+                    <img 
+                      [src]="item.weather.condition.icon" 
+                      [alt]="item.weather.condition.text"
+                      class="condition-icon"
+                    />
+                    <span>{{ item.weather.condition.text }}</span>
+                  </div>
+                } @else {
+                  --
+                }
+              </td>
+              <td class="time-cell">
+                @if (item.weather?.localtime) {
+                  {{ item.weather.localtime | date:'medium' }}
+                } @else {
+                  {{ item.timestamp | date:'medium' }}
+                }
+              </td>
+              <td class="actions-cell">
+                <button class="search-again-button" (click)="searchAgain(item)">
+                  Buscar de nuevo
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (hasMoreItems) {
+      <div class="load-more">
+        <button class="load-more-button" (click)="loadMoreItems()">
+          Cargar más
+        </button>
+      </div>
     }
   </div>
-
-  @if (history.length > 0) {
-    <div class="history-list">
-      @for (item of history; track item.id) {
-        <div class="history-item">
-          <div class="history-info">
-            <h3>{{ item.name }}</h3>
-            <p>{{ item.region }}, {{ item.country }}</p>
-            <small>{{ item.timestamp | date:'medium' }}</small>
-          </div>
-          <div class="history-actions">
-            <button
-              class="search-again-button"
-              (click)="searchAgain(item)"
-            >
-              Buscar de nuevo
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-  } @else {
-    <div class="no-history">
-      <p>No hay búsquedas recientes.</p>
-      <p>Las búsquedas que realices aparecerán aquí.</p>
-    </div>
-  }
-</div>
+} @else {
+  <div class="no-history">
+    <p>No hay búsquedas recientes</p>
+  </div>
+}

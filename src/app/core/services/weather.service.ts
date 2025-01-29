@@ -1,33 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, shareReplay, map } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface WeatherResponse {
-  location: {
-    name: string;
-    region: string;
-    country: string;
-    localtime: string;
-  };
-  current: {
-    temp_c: number;
-    temp_f: number;
-    condition: {
-      text: string;
-      icon: string;
-    };
-    wind_kph: number;
-    humidity: number;
-  };
-}
-
-export interface LocationSuggestion {
-  id: number;
-  name: string;
-  region: string;
-  country: string;
-}
+import { WeatherResponse, LocationSuggestion } from '../../shared/interfaces/weather.interface';
 
 @Injectable({
   providedIn: 'root'

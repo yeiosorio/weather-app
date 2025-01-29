@@ -1,43 +1,40 @@
 @if (weatherData) {
   <div class="weather-card">
-    <div class="location-info">
-      <h2>{{ weatherData.location.name }}</h2>
-      <p class="location-detail">
-        {{ weatherData.location.region }}, {{ weatherData.location.country }}
-      </p>
-      <p class="local-time">
-        {{ weatherData.location.localtime | date:'medium' }}
-      </p>
-      <button
-        class="favorite-button"
-        (click)="toggleFavorite()"
-        [class.is-favorite]="isFavorite"
-      >
-        {{ isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
-      </button>
-    </div>
-
-    <div class="weather-info">
-      <div class="temperature-container">
-        <div class="temperature">
-          <span class="temp-value">{{ weatherData.current.temp_c }}</span>
-          <span class="temp-unit">°C</span>
+    <div class="weather-content">
+      <div class="main-info">
+        <div class="location-info">
+          <h2>{{ weatherData.location.name }}</h2>
+          <p class="location-detail">
+            {{ weatherData.location.region }}, {{ weatherData.location.country }}
+          </p>
+          <p class="local-time">
+            {{ weatherData.location.localtime | date:'medium' }}
+          </p>
         </div>
-        <div class="temperature fahrenheit">
-          <span class="temp-value">{{ weatherData.current.temp_f }}</span>
-          <span class="temp-unit">°F</span>
-        </div>
-      </div>
 
-      <div class="condition">
-        <img
-          [src]="weatherData.current.condition.icon"
-          [alt]="weatherData.current.condition.text"
-          class="condition-icon"
-        />
-        <p class="condition-text">
-          {{ weatherData.current.condition.text }}
-        </p>
+        <div class="temperature-info">
+          <div class="temperature-container">
+            <div class="temperature">
+              <span class="temp-value">{{ weatherData.current.temp_c }}</span>
+              <span class="temp-unit">°C</span>
+            </div>
+            <div class="temperature fahrenheit">
+              <span class="temp-value">{{ weatherData.current.temp_f }}</span>
+              <span class="temp-unit">°F</span>
+            </div>
+          </div>
+
+          <div class="condition">
+            <img
+              [src]="weatherData.current.condition.icon"
+              [alt]="weatherData.current.condition.text"
+              class="condition-icon"
+            />
+            <p class="condition-text">
+              {{ weatherData.current.condition.text }}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="additional-info">
@@ -49,7 +46,19 @@
           <span class="info-label">Humedad</span>
           <span class="info-value">{{ weatherData.current.humidity }}%</span>
         </div>
+        <div class="info-item">
+          <span class="info-label">Sensación</span>
+          <span class="info-value">{{ weatherData.current.feelslike_c }}°C</span>
+        </div>
       </div>
+
+      <button
+        class="favorite-button"
+        (click)="toggleFavorite()"
+        [class.is-favorite]="isFavorite"
+      >
+        {{ isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+      </button>
     </div>
   </div>
 } @else {

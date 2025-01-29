@@ -14,6 +14,7 @@ export interface WeatherResponse {
     };
     wind_kph: number;
     humidity: number;
+    feelslike_c: number;
   };
 }
 
@@ -30,4 +31,12 @@ export interface StoredLocation {
   region: string;
   country: string;
   timestamp?: number;
+  weather?: {
+    temp_c: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+    localtime: string;
+  };
 } 

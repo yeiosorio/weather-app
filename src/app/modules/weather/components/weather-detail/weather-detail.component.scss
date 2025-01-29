@@ -1,42 +1,155 @@
 .weather-card {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
   margin: 0 auto;
 }
 
+.weather-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.main-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+}
+
 .location-info {
-  text-align: center;
-  margin-bottom: 24px;
+  flex: 1;
 
   h2 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #333;
     margin: 0 0 8px;
+    font-weight: 600;
   }
 
   .location-detail {
     color: #666;
+    font-size: 1.1rem;
     margin: 0 0 4px;
   }
 
   .local-time {
     color: #888;
     font-size: 0.9rem;
-    margin-bottom: 16px;
+  }
+}
+
+.temperature-info {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.temperature-container {
+  text-align: right;
+}
+
+.temperature {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+
+  .temp-value {
+    font-size: 4rem;
+    font-weight: 600;
+    color: #2196f3;
+    line-height: 1;
+  }
+
+  .temp-unit {
+    font-size: 1.5rem;
+    color: #666;
+    margin-left: 4px;
+  }
+
+  &.fahrenheit {
+    margin-top: 8px;
+    color: #666;
+    
+    .temp-value {
+      font-size: 1.5rem;
+      color: #666;
+    }
+    
+    .temp-unit {
+      font-size: 1rem;
+    }
+  }
+}
+
+.condition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 24px;
+  border-left: 1px solid #e0e0e0;
+
+  .condition-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+  }
+
+  .condition-text {
+    color: #444;
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 500;
+  }
+}
+
+.additional-info {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .info-label {
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-value {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 }
 
 .favorite-button {
+  align-self: center;
   background: #f5f5f5;
   border: 2px solid #2196f3;
   color: #2196f3;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 12px 24px;
+  border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
 
   &:hover {
     background: #e3f2fd;
@@ -52,98 +165,49 @@
   }
 }
 
-.weather-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
-
-.temperature-container {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-.temperature {
-  text-align: center;
-
-  .temp-value {
-    font-size: 3rem;
-    font-weight: 500;
-    color: #333;
-  }
-
-  .temp-unit {
-    font-size: 1.5rem;
-    color: #666;
-  }
-
-  &.fahrenheit {
-    color: #666;
-    .temp-value {
-      font-size: 2rem;
-    }
-    .temp-unit {
-      font-size: 1rem;
-    }
-  }
-}
-
-.condition {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-
-  .condition-icon {
-    width: 64px;
-    height: 64px;
-  }
-
-  .condition-text {
-    color: #444;
-    font-size: 1.2rem;
-    text-align: center;
-  }
-}
-
-.additional-info {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-  width: 100%;
-  padding-top: 16px;
-  border-top: 1px solid #eee;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-
-  .info-label {
-    color: #666;
-    font-size: 0.9rem;
-  }
-
-  .info-value {
-    color: #333;
-    font-size: 1.1rem;
-    font-weight: 500;
-  }
-}
-
 .no-data {
   text-align: center;
   padding: 48px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   p {
     color: #666;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+  }
+}
+
+// Media queries para responsividad
+@media (max-width: 768px) {
+  .main-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .location-info {
+    text-align: center;
+  }
+
+  .temperature-info {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .temperature-container {
+    text-align: center;
+  }
+
+  .condition {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .additional-info {
+    flex-wrap: wrap;
+    gap: 24px;
   }
 }
