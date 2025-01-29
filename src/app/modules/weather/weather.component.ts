@@ -3,54 +3,16 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { WeatherSearchComponent } from './components/weather-search/weather-search.component';
 import { WeatherDetailComponent } from './components/weather-detail/weather-detail.component';
-import { WeatherService, WeatherResponse } from '../../core/services/weather.service';
+import { WeatherService } from '../../core/services/weather.service';
+import { WeatherResponse } from '../../shared/interfaces/weather.interface';
 import { StorageService } from '../../core/services/storage.service';
 
 @Component({
   selector: 'app-weather',
   standalone: true,
   imports: [CommonModule, WeatherSearchComponent, WeatherDetailComponent],
-  template: `
-    <div class="weather-container">
-      <h1>Clima Actual</h1>
-      
-      <app-weather-search
-        (locationSelected)="onLocationSelected($event)"
-      ></app-weather-search>
-
-      @if (error) {
-        <div class="error-message">
-          {{ error }}
-        </div>
-      }
-
-      <app-weather-detail
-        [weatherData]="currentWeather"
-      ></app-weather-detail>
-    </div>
-  `,
-  styles: [`
-    .weather-container {
-      padding: 24px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 32px;
-    }
-
-    .error-message {
-      color: #f44336;
-      text-align: center;
-      padding: 12px;
-      margin: 12px 0;
-      background-color: #ffebee;
-      border-radius: 4px;
-    }
-  `],
+  templateUrl: './weather.component.html',
+  styleUrls: ['./weather.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WeatherComponent implements OnInit {

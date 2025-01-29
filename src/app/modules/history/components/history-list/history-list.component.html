@@ -1,1 +1,40 @@
-<p>history-list works!</p>
+<div class="history-container">
+  <div class="history-header">
+    <h2>Historial de Búsquedas</h2>
+    @if (history.length > 0) {
+      <button
+        class="clear-button"
+        (click)="clearHistory()"
+      >
+        Limpiar Historial
+      </button>
+    }
+  </div>
+
+  @if (history.length > 0) {
+    <div class="history-list">
+      @for (item of history; track item.id) {
+        <div class="history-item">
+          <div class="history-info">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.region }}, {{ item.country }}</p>
+            <small>{{ item.timestamp | date:'medium' }}</small>
+          </div>
+          <div class="history-actions">
+            <button
+              class="search-again-button"
+              (click)="searchAgain(item)"
+            >
+              Buscar de nuevo
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-history">
+      <p>No hay búsquedas recientes.</p>
+      <p>Las búsquedas que realices aparecerán aquí.</p>
+    </div>
+  }
+</div>

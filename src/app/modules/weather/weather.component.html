@@ -1,0 +1,17 @@
+<div class="weather-container">
+  <h1>Clima Actual</h1>
+  
+  <app-weather-search
+    (locationSelected)="onLocationSelected($event)"
+  ></app-weather-search>
+
+  @if (error) {
+    <div class="error-message">
+      {{ error }}
+    </div>
+  }
+
+  <app-weather-detail
+    [weatherData]="currentWeather"
+  ></app-weather-detail>
+</div> 

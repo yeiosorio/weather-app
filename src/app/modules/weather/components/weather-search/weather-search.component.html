@@ -1,1 +1,33 @@
-<p>weather-search works!</p>
+<div class="search-container">
+  <div class="search-box">
+    <input
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Buscar ciudad..."
+      class="search-input"
+      (focus)="showSuggestions = true"
+    />
+    @if (loading) {
+      <div class="loading-indicator"></div>
+    }
+  </div>
+
+  @if (showSuggestions && suggestions.length > 0) {
+    <ul class="suggestions-list">
+      @for (suggestion of suggestions; track suggestion.id) {
+        <li
+          class="suggestion-item"
+          (click)="selectLocation(suggestion)"
+        >
+          {{ suggestion.name }}, {{ suggestion.region }}, {{ suggestion.country }}
+        </li>
+      }
+    </ul>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      {{ error }}
+    </div>
+  }
+</div>

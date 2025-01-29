@@ -1,1 +1,27 @@
-<p>favorites-list works!</p>
+<div class="favorites-container">
+  @if (favorites.length > 0) {
+    <div class="favorites-grid">
+      @for (favorite of favorites; track favorite.id) {
+        <div class="favorite-card">
+          <div class="favorite-info">
+            <h3>{{ favorite.name }}</h3>
+            <p>{{ favorite.region }}, {{ favorite.country }}</p>
+          </div>
+          <div class="favorite-actions">
+            <button
+              class="remove-button"
+              (click)="removeFavorite(favorite.id)"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-favorites">
+      <p>No tienes ciudades favoritas guardadas.</p>
+      <p>Agrega ciudades desde la búsqueda del clima.</p>
+    </div>
+  }
+</div>
